@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/v1/expenses";
+const API_URL = "/api/v1/expenses";
 
 let expenses = [];
 let editId = null;
@@ -28,7 +28,7 @@ async function loadExpenses() {
         renderExpenses();
 
     } catch (err) {
-        console.error(err);
+        console.error("Load Expenses Error:", err);
         alert("Unable to connect to the backend.");
     }
 }
@@ -37,7 +37,6 @@ async function loadExpenses() {
 // Add / Update Expense
 // -------------------------
 async function addExpense() {
-
     const description =
         document.getElementById("desc").value.trim();
 
@@ -50,12 +49,10 @@ async function addExpense() {
     const amount =
         Number(document.getElementById("amount").value);
 
-
     if (!description || !category || !expense_date || amount <= 0) {
         alert("Please fill all fields.");
         return;
     }
-
 
     const expense = {
         description,
@@ -64,20 +61,13 @@ async function addExpense() {
         amount
     };
 
-
     const isEditing = editId !== null;
 
-
     try {
-
         let response;
 
-
-        // -------------------------
         // ADD
-        // -------------------------
         if (!isEditing) {
-
             response = await fetch(API_URL, {
                 method: "POST",
                 headers: {
@@ -85,15 +75,10 @@ async function addExpense() {
                 },
                 body: JSON.stringify(expense)
             });
-
         }
 
-
-        // -------------------------
         // UPDATE
-        // -------------------------
         else {
-
             response = await fetch(`${API_URL}/${editId}`, {
                 method: "PUT",
                 headers: {
@@ -101,16 +86,12 @@ async function addExpense() {
                 },
                 body: JSON.stringify(expense)
             });
-
         }
-
 
         const result =
             await response.json().catch(() => null);
 
-
         if (!response.ok) {
-
             console.error("Server Error:", result);
 
             alert(
@@ -122,21 +103,16 @@ async function addExpense() {
             return;
         }
 
-
-        // Reset edit mode
         if (isEditing) {
-
             editId = null;
 
             document.querySelector(".add-btn").textContent =
                 "Add Expense";
         }
 
-
         clearInputs();
 
         await loadExpenses();
-
 
         alert(
             isEditing
@@ -144,27 +120,20 @@ async function addExpense() {
                 : "Expense added successfully!"
         );
 
-
     } catch (err) {
-
-        console.error(err);
-
+        console.error("Add / Update Error:", err);
         alert("Unable to connect to the backend.");
-
     }
 }
-
 
 // -------------------------
 // Render Expenses
 // -------------------------
 function renderExpenses() {
-
     const tbody =
         document.getElementById("expenseBody");
 
     tbody.innerHTML = "";
-
 
     const search =
         document
@@ -172,51 +141,40 @@ function renderExpenses() {
             .value
             .toLowerCase();
 
-
     const filter =
         document
             .getElementById("filterCategory")
             .value;
 
-
     let total = 0;
     let sno = 1;
 
-
     expenses.forEach(expense => {
-
         const matchesSearch =
             expense.description
                 .toLowerCase()
                 .includes(search);
 
-
         const matchesCategory =
             filter === "All" ||
             expense.category === filter;
-
 
         if (!(matchesSearch && matchesCategory)) {
             return;
         }
 
-
         total += Number(expense.amount);
-
 
         const row =
             document.createElement("tr");
 
+        const createdAt = expense.created_at
+            ? new Date(expense.created_at)
+            : null;
 
-        row.innerHTML = `
-            <td>${sno++}</td>
-
-            <td>${expense.description}</td>
-
-            <td>${expense.category}</td>
-
-            <td>
-                ${new Date(expense.created_at).toLocaleString(
+        const formattedDate =
+            createdAt && !isNaN(createdAt)
+                ? createdAt.toLocaleString(
                     "en-IN",
                     {
                         day: "2-digit",
@@ -226,8 +184,17 @@ function renderExpenses() {
                         minute: "2-digit",
                         hour12: true
                     }
-                )}
-            </td>
+                )
+                : "-";
+
+        row.innerHTML = `
+            <td>${sno++}</td>
+
+            <td>${expense.description}</td>
+
+            <td>${expense.category}</td>
+
+            <td>${formattedDate}</td>
 
             <td>
                 ₹ ${Number(expense.amount).toFixed(2)}
@@ -248,79 +215,62 @@ function renderExpenses() {
             </td>
         `;
 
-
         tbody.appendChild(row);
-
     });
-
 
     document.getElementById("total").textContent =
         total.toFixed(2);
 }
 
-
 // -------------------------
-// Edit
+// Edit Expense
 // -------------------------
 function editExpense(id) {
-
     const expense =
         expenses.find(e => e.id == id);
-
 
     if (!expense) {
         return;
     }
 
-
     document.getElementById("desc").value =
         expense.description;
-
 
     document.getElementById("category").value =
         expense.category;
 
-
     document.getElementById("date").value =
-        expense.expense_date.split("T")[0];
-
+        expense.expense_date
+            ? expense.expense_date.split("T")[0]
+            : "";
 
     document.getElementById("amount").value =
         expense.amount;
 
-
     editId = id;
-
 
     document.querySelector(".add-btn").textContent =
         "Update Expense";
 }
 
-
 // -------------------------
-// Delete
+// Delete Expense
 // -------------------------
 async function deleteExpense(id) {
-
     if (!confirm("Delete this expense?")) {
         return;
     }
 
-
     try {
-
         const response =
             await fetch(`${API_URL}/${id}`, {
                 method: "DELETE"
             });
 
-
         const result =
             await response.json().catch(() => null);
 
-
         if (!response.ok) {
-
             console.error("Server Error:", result);
 
             alert(
@@ -332,78 +282,56 @@ async function deleteExpense(id) {
             return;
         }
 
-
         await loadExpenses();
-
 
         alert(
             result?.message ||
             "Expense deleted successfully!"
         );
 
-
     } catch (err) {
-
-        console.error(err);
-
+        console.error("Delete Error:", err);
         alert("Unable to delete expense.");
-
     }
 }
-
 
 // -------------------------
 // Clear Inputs
 // -------------------------
 function clearInputs() {
-
     document.getElementById("desc").value = "";
-
     document.getElementById("category").value = "";
-
     document.getElementById("date").value = "";
-
     document.getElementById("amount").value = "";
 }
 
-
 // -------------------------
-// Clear All
+// Clear All Expenses
 // -------------------------
 async function clearAll() {
-
-    // Check whether expenses exist
     if (expenses.length === 0) {
         alert("There are no expenses to clear.");
         return;
     }
 
-
-    // Confirmation before deleting everything
     const confirmed = confirm(
         "Are you sure you want to delete all expenses?"
     );
-
 
     if (!confirmed) {
         return;
     }
 
-
     try {
-
         const response =
             await fetch(`${API_URL}/clear`, {
                 method: "DELETE"
             });
 
-
         const result =
             await response.json().catch(() => null);
 
-
         if (!response.ok) {
-
             console.error("Server Error:", result);
 
             alert(
@@ -415,26 +343,18 @@ async function clearAll() {
             return;
         }
 
-
-        // Reload data from database
         await loadExpenses();
-
 
         alert(
             result?.message ||
             "All expenses deleted successfully!"
         );
 
-
     } catch (err) {
-
         console.error("Clear All Error:", err);
-
         alert("Unable to connect to the backend.");
-
     }
 }
-
 
 // -------------------------
 // Search
@@ -444,7 +364,6 @@ document.getElementById("search").addEventListener(
     renderExpenses
 );
 
-
 // -------------------------
 // Category Filter
 // -------------------------
@@ -453,53 +372,41 @@ document.getElementById("filterCategory").addEventListener(
     renderExpenses
 );
 
-
 // -------------------------
 // Keyboard Shortcuts
 // -------------------------
 document.getElementById("desc").addEventListener(
     "keydown",
     e => {
-
         if (e.key === "Enter") {
             document.getElementById("category").focus();
         }
-
     }
 );
-
 
 document.getElementById("category").addEventListener(
     "keydown",
     e => {
-
         if (e.key === "Enter") {
             document.getElementById("date").focus();
         }
-
     }
 );
-
 
 document.getElementById("date").addEventListener(
     "keydown",
     e => {
-
         if (e.key === "Enter") {
             document.getElementById("amount").focus();
         }
-
     }
 );
-
 
 document.getElementById("amount").addEventListener(
     "keydown",
     e => {
-
         if (e.key === "Enter") {
             addExpense();
         }
-
     }
 );
