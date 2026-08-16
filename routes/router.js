@@ -13,7 +13,9 @@ import {
 const expenseRouter = Router();
 
 
+// -------------------------
 // Test Route
+// -------------------------
 expenseRouter.get("/", (req, res) => {
     res.status(200).json({
         message: "Expense Tracker API is running 🚀"
@@ -21,27 +23,39 @@ expenseRouter.get("/", (req, res) => {
 });
 
 
+// -------------------------
 // Get all database tables
+// -------------------------
 expenseRouter.get("/tables", showAllTables);
 
 
+// -------------------------
 // Get all expenses
+// -------------------------
 expenseRouter.get("/allrows", showAllRows);
 
 
+// -------------------------
 // Add new expense
+// -------------------------
 expenseRouter.post("/", addExpense);
 
 
+// -------------------------
 // Update expense
+// -------------------------
 expenseRouter.put("/:id", updateExpense);
 
 
+// -------------------------
 // Clear all expenses
-expenseRouter.delete("/clearall", clearAllExpenses);
+// -------------------------
+expenseRouter.delete("/clear", clearAllExpenses);
 
 
+// -------------------------
 // Delete single expense
+// -------------------------
 expenseRouter.delete("/:id", deleteExpense);
 
 

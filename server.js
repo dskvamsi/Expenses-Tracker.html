@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-
 import expenseRouter from "./routes/router.js";
 
 dotenv.config();
@@ -26,6 +25,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1/expenses", expenseRouter);
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`✅ Server running on port ${PORT}`);
 });

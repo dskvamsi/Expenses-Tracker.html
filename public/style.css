@@ -1,6 +1,10 @@
-/* ==========================
-   General
-========================== */
+/* =========================================================
+   EXPENSEFLOW - MODERN EXPENSE TRACKER
+========================================================= */
+
+/* =========================
+   RESET
+========================= */
 
 * {
     margin: 0;
@@ -8,293 +12,996 @@
     box-sizing: border-box;
 }
 
+
+/* =========================
+   BODY
+========================= */
+
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #eef2f7, #d9e7f7);
-    padding: 30px;
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #e8eaff 0%,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            #dff7ff 0%,
+            transparent 35%
+        ),
+        #f5f7fb;
+
+    color: #172033;
+
+    padding: 35px 20px;
 }
 
-/* ==========================
-   Container
-========================== */
 
-.container {
-    max-width: 950px;
-    width: 100%;
+/* =========================
+   MAIN PAGE
+========================= */
+
+.page {
+    max-width: 1150px;
     margin: auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* ==========================
-   Headings
-========================== */
 
-h1 {
-    display: inline-block;
-    background: #2d5bd1;
-    color: #fff;
-    padding: 10px 25px;
-    border-radius: 10px;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 25px;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.logo {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    font-size: 27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #635bff,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 10px 25px rgba(99, 91, 255, .25);
+}
+
+
+.brand h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+
+.brand p {
+    margin-top: 3px;
+    color: #7b8497;
+    font-size: 13px;
+}
+
+
+.header-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 14px;
+
+    border-radius: 30px;
+
+    background: white;
+
+    color: #626b7e;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow:
+        0 5px 20px rgba(20, 30, 60, .06);
+}
+
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 4px rgba(34, 197, 94, .12);
+}
+
+
+/* =========================
+   TOTAL SUMMARY
+========================= */
+
+.summary-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 30px;
+
+    margin-bottom: 22px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5b55e8,
+            #7048c9
+        );
+
+    color: white;
+
+    box-shadow:
+        0 18px 40px rgba(91, 85, 232, .22);
+}
+
+
+.summary-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    right: -80px;
+    top: -100px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .08);
+}
+
+
+.summary-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+.summary-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, .15);
+
+    font-size: 28px;
+
+    backdrop-filter: blur(10px);
+}
+
+
+.summary-label {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    opacity: .75;
+    font-weight: 600;
+}
+
+
+.summary-card h2 {
+    margin-top: 4px;
+
     font-size: 38px;
+
+    letter-spacing: -1px;
+
+    color: white;
 }
 
-h2 {
-    color: #333;
-    margin: 25px 0 15px;
+
+.summary-subtitle {
+    margin-top: 4px;
+
+    font-size: 13px;
+
+    opacity: .7;
 }
 
-/* ==========================
-   Input Section
-========================== */
+
+.summary-decoration {
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 65px;
+
+    opacity: .15;
+
+    margin-right: 30px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+    background: rgba(255, 255, 255, .92);
+
+    border: 1px solid rgba(220, 225, 235, .8);
+
+    border-radius: 20px;
+
+    padding: 28px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 10px 35px rgba(20, 30, 60, .06);
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+    margin-bottom: 22px;
+}
+
+
+.section-heading h2 {
+    color: #182033;
+
+    font-size: 21px;
+
+    font-weight: 700;
+}
+
+
+.section-heading p {
+    color: #8a92a3;
+
+    margin-top: 5px;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   INPUT SECTION
+========================= */
 
 .input-section {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        1.4fr
+        1fr
+        1fr
+        1fr;
+
     gap: 15px;
+
+    margin-bottom: 18px;
 }
 
-.input-section input,
-.input-section select {
+
+.input-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.input-group label {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #626b7d;
+}
+
+
+.input-group input,
+.input-group select {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: 0.3s;
+
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #e1e5ec;
+
+    border-radius: 11px;
+
+    background: #fafbfc;
+
+    color: #252c3b;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition: .25s;
 }
 
-.input-section input:focus,
-.input-section select:focus {
+
+.input-group input:hover,
+.input-group select:hover {
+    border-color: #c8cce8;
+}
+
+
+.input-group input:focus,
+.input-group select:focus {
     outline: none;
-    border-color: #28a745;
-    box-shadow: 0 0 6px rgba(40,167,69,.35);
+
+    border-color: #635bff;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 91, 255, .09);
 }
 
-/* ==========================
-   Search & Filter
-========================== */
+
+/* =========================
+   AMOUNT INPUT
+========================= */
+
+.amount-input {
+    position: relative;
+}
+
+
+.amount-input span {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #727b8e;
+
+    font-weight: 600;
+
+    font-size: 15px;
+
+    z-index: 1;
+}
+
+
+.amount-input input {
+    padding-left: 30px;
+}
+
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+.add-btn {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #635bff,
+            #7048d8
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(99, 91, 255, .20);
+
+    transition: .25s;
+}
+
+
+.add-btn span {
+    font-size: 20px;
+}
+
+
+.add-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(99, 91, 255, .28);
+}
+
+
+.add-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   FILTER
+========================= */
 
 .filter-section {
     display: flex;
-    gap: 15px;
+
+    gap: 12px;
+
     margin-bottom: 20px;
 }
 
-.filter-section input,
-.filter-section select {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+
+.search-box {
+    position: relative;
+
+    flex: 1;
+}
+
+
+.search-box span {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
     font-size: 15px;
-    transition: .3s;
+
+    opacity: .6;
 }
 
-.filter-section input {
-    flex: 7;
+
+.search-box input,
+.filter-section select {
+    height: 46px;
+
+    border: 1px solid #e1e5ec;
+
+    border-radius: 10px;
+
+    background: #fafbfc;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    color: #252c3b;
+
+    transition: .25s;
 }
+
+
+.search-box input {
+    width: 100%;
+
+    padding: 0 15px 0 40px;
+}
+
 
 .filter-section select {
-    flex: 3;
+    width: 210px;
+
+    padding: 0 13px;
 }
 
-.filter-section input:focus,
+
+.search-box input:focus,
 .filter-section select:focus {
     outline: none;
-    border-color: #28a745;
-    box-shadow: 0 0 6px rgba(40,167,69,.35);
+
+    border-color: #635bff;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 91, 255, .08);
 }
 
-/* ==========================
-   Buttons
-========================== */
 
-button {
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 12px 18px;
-    transition: .3s ease;
-}
-
-button:hover {
-    transform: translateY(-2px);
-}
-
-.add-btn {
-    background: #28a745;
-    color: white;
-}
-
-.add-btn:hover {
-    background: #218838;
-}
-
-.edit-btn {
-    background: #ffc107;
-    color: #000;
-    margin-right: 8px;
-}
-
-.edit-btn:hover {
-    background: #e0a800;
-}
-
-.delete-btn {
-    background: #dc3545;
-    color: white;
-}
-
-.delete-btn:hover {
-    background: #c82333;
-}
-
-.clear-btn {
-    background: #6c757d;
-    color: white;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.clear-btn:hover {
-    background: #5a6268;
-}
-
-/* ==========================
-   Table
-========================== */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-container {
+    width: 100%;
+
     overflow-x: auto;
-    border-radius: 10px;
+
+    border: 1px solid #edf0f4;
+
+    border-radius: 13px;
 }
+
 
 table {
     width: 100%;
-    min-width: 700px;
+
+    min-width: 900px;
+
     border-collapse: collapse;
-    margin-top: 15px;
 }
+
+
+thead {
+    background: #f7f8fb;
+}
+
+
+/* TABLE HEADINGS */
 
 th {
-    background: #28a745;
-    color: white;
-    padding: 14px;
-    text-align: center;
-}
+    padding: 17px 15px;
 
-td {
-    padding: 14px;
-    border: 1px solid #ddd;
-    text-align: center;
+    color: #596276;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .6px;
+
+    border-bottom: 1px solid #e9ecf1;
+
     white-space: nowrap;
 }
 
-tr:nth-child(even) {
-    background: #f9f9f9;
+
+/* TABLE DATA */
+
+td {
+    padding: 18px 15px;
+
+    border-bottom: 1px solid #f0f1f4;
+
+    color: #41495a;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    text-align: center;
+
+    white-space: nowrap;
 }
 
-tr:hover {
-    background: #e8f5e9;
+
+tbody tr {
     transition: .2s;
 }
 
-/* ==========================
-   Date & Time Column
-========================== */
 
-th:nth-child(4),
-td:nth-child(4) {
-    min-width: 170px;
+tbody tr:hover {
+    background: #fafaff;
 }
 
-td:nth-child(4) {
-    font-size: 14px;
-    color: #555;
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================
+   SERIAL NUMBER
+========================= */
+
+td:first-child {
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #697386;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+td:nth-child(2) {
+    color: #202738;
+
+    font-weight: 700;
+
+    font-size: 16px;
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+td:nth-child(3) {
+    font-size: 15px;
+
     font-weight: 600;
 }
 
-/* ==========================
-   Amount Column
-========================== */
+
+/* =========================
+   DATE & TIME
+========================= */
+
+th:nth-child(4),
+td:nth-child(4) {
+    min-width: 180px;
+}
+
+
+td:nth-child(4) {
+    color: #788194;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   AMOUNT
+========================= */
 
 td:nth-child(5) {
-    font-weight: bold;
-    color: #008000;
+    color: #16a36a;
+
+    font-weight: 800;
+
+    font-size: 17px;
 }
 
-/* ==========================
-   Total
-========================== */
 
-#total {
-    color: #008000;
-    font-size: 42px;
-    font-weight: bold;
+/* =========================
+   EDIT BUTTON
+========================= */
+
+.edit-btn {
+    border: none;
+
+    padding: 9px 13px;
+
+    margin-right: 5px;
+
+    border-radius: 7px;
+
+    background: #fff4d6;
+
+    color: #a96f00;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
 }
 
-/* ==========================
-   Responsive
-========================== */
 
-@media (max-width:768px){
+.edit-btn:hover {
+    background: #ffe9aa;
 
-    body{
-        padding:15px;
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-btn {
+    border: none;
+
+    padding: 9px 13px;
+
+    border-radius: 7px;
+
+    background: #ffe7e7;
+
+    color: #d64545;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+.delete-btn:hover {
+    background: #ffd3d3;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   CLEAR ALL
+========================= */
+
+.footer-actions {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 5px;
+}
+
+
+.clear-btn {
+    border: 1px solid #ffd8d8;
+
+    padding: 12px 24px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #d64545;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+
+.clear-btn:hover {
+    background: #fff1f1;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #9aa1af;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .input-section {
+        grid-template-columns: 1fr 1fr;
     }
 
-    .container{
-        padding:20px;
+}
+
+
+@media (max-width: 650px) {
+
+    body {
+        padding: 20px 12px;
     }
 
-    h1{
-        font-size:30px;
-        width:100%;
-        text-align:center;
+
+    .header {
+        align-items: flex-start;
     }
 
-    .input-section{
-        grid-template-columns:1fr;
+
+    .header-badge {
+        display: none;
     }
 
-    .filter-section{
-        flex-direction:column;
+
+    .brand h1 {
+        font-size: 23px;
     }
 
-    .filter-section input,
-    .filter-section select{
-        width:100%;
+
+    .brand p {
+        font-size: 12px;
     }
 
-    button{
-        width:100%;
+
+    .logo {
+        width: 48px;
+        height: 48px;
+
+        font-size: 22px;
     }
+
+
+    .summary-card {
+        padding: 23px;
+    }
+
+
+    .summary-card h2 {
+        font-size: 30px;
+    }
+
+
+    .summary-decoration {
+        display: none;
+    }
+
+
+    .card {
+        padding: 20px 15px;
+
+        border-radius: 16px;
+    }
+
+
+    .input-section {
+        grid-template-columns: 1fr;
+    }
+
+
+    .filter-section {
+        flex-direction: column;
+    }
+
+
+    .filter-section select {
+        width: 100%;
+    }
+
+
+    .table-container {
+        border-radius: 10px;
+    }
+
+
+    /*
+       Keep mobile table readable.
+       User can horizontally scroll.
+    */
+
+    table {
+        min-width: 900px;
+    }
+
+
+    th {
+        font-size: 13px;
+    }
+
+
+    td {
+        font-size: 15px;
+    }
+
+
+    td:nth-child(2) {
+        font-size: 15px;
+    }
+
+
+    td:nth-child(4) {
+        font-size: 13px;
+    }
+
+
+    td:nth-child(5) {
+        font-size: 16px;
+    }
+
 
     .edit-btn,
-    .delete-btn{
-        display:block;
-        width:100%;
-        margin:5px 0;
+    .delete-btn {
+        margin: 2px;
+
+        padding: 8px 10px;
+
+        font-size: 12px;
     }
 
-    table{
-        font-size:14px;
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+    .brand h1 {
+        font-size: 20px;
     }
 
-    th,
-    td{
-        padding:10px;
+
+    .summary-card h2 {
+        font-size: 26px;
     }
 
-    #total{
-        font-size:30px;
+
+    .summary-icon {
+        width: 50px;
+        height: 50px;
+
+        font-size: 22px;
     }
+
 }

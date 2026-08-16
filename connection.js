@@ -3,17 +3,23 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// MySQL connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
+    port: Number(process.env.DB_PORT) || 3306,
+
+    // Aiven requires SSL
+    ssl: {
+        rejectUnauthorized: false
+    },
+
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
-
 
 // Check database connection
 pool.getConnection()
@@ -24,7 +30,6 @@ pool.getConnection()
     .catch((err) => {
         console.error("❌ MySQL Connection Failed:", err.message);
     });
-
 
 // Show all tables
 export async function showAllTables(req, res) {
@@ -39,7 +44,6 @@ export async function showAllTables(req, res) {
     }
 }
 
-
 // Show all expense records
 export async function showAllRows(req, res) {
     try {
@@ -53,11 +57,15 @@ export async function showAllRows(req, res) {
     }
 }
 
-
 // Add a new expense
 export async function addExpense(req, res) {
     try {
-        const { description, category, expense_date, amount } = req.body;
+        const {
+            description,
+            category,
+            expense_date,
+            amount
+        } = req.body;
 
         if (!description || !category || !expense_date || amount == null) {
             return res.status(400).json({
@@ -66,7 +74,7 @@ export async function addExpense(req, res) {
         }
 
         const [result] = await pool.query(
-            `INSERT INTO expenses 
+            `INSERT INTO expenses
             (description, category, expense_date, amount)
             VALUES (?, ?, ?, ?)`,
             [description, category, expense_date, amount]
@@ -84,21 +92,32 @@ export async function addExpense(req, res) {
     }
 }
 
-
 // Update an expense
 export async function updateExpense(req, res) {
     try {
         const { id } = req.params;
-        const { description, category, expense_date, amount } = req.body;
+
+        const {
+            description,
+            category,
+            expense_date,
+            amount
+        } = req.body;
 
         const [result] = await pool.query(
             `UPDATE expenses
-             SET description = ?, 
-                 category = ?, 
-                 expense_date = ?, 
+             SET description = ?,
+                 category = ?,
+                 expense_date = ?,
                  amount = ?
              WHERE id = ?`,
-            [description, category, expense_date, amount, id]
+            [
+                description,
+                category,
+                expense_date,
+                amount,
+                id
+            ]
         );
 
         if (result.affectedRows === 0) {
@@ -117,7 +136,6 @@ export async function updateExpense(req, res) {
         });
     }
 }
-
 
 // Delete an expense
 export async function deleteExpense(req, res) {
@@ -146,7 +164,6 @@ export async function deleteExpense(req, res) {
     }
 }
 
-
 // Clear all expenses
 export async function clearAllExpenses(req, res) {
     try {
@@ -157,13 +174,15 @@ export async function clearAllExpenses(req, res) {
         });
 
     } catch (err) {
-        console.error("❌ Error clearing expenses:", err.message);
+        console.error(
+            "❌ Error clearing expenses:",
+            err.message
+        );
 
         res.status(500).json({
             error: err.message
         });
     }
 }
-
 
 export default pool;
