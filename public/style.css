@@ -1005,3 +1005,29 @@ footer {
     }
 
 }
+
+/* ================= SPENDLY LOGO ================= */
+
+.brand-logo {
+    width: 250px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 650px) {
+    .brand-logo {
+        width: 180px;
+    }
+}
+
+@media (max-width: 400px) {
+    .brand-logo {
+        width: 150px;
+    }
+}
