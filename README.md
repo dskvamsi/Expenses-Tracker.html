@@ -1,143 +1,260 @@
-#  Spendly Tracker
+# 💰 Spendly Tracker
 
-**Spendly Tracker** is a full-stack expense tracking web application built as a practice project to learn and strengthen full-stack web development concepts.
+### Track smarter. Spend better.
 
-The application allows users to add, view, edit, delete, search, and filter expenses while storing the data persistently in a MySQL database.
+Spendly Tracker is a **full-stack, multi-user personal expense management web application** built to help users record, organize, search, and manage their daily expenses.
 
-The project demonstrates how a frontend communicates with a backend REST API, how a Node.js application interacts with MySQL, and how a complete full-stack application can be deployed to the cloud.
+The application includes a complete authentication system. Each user can create an account, log in securely, and access only their own expenses.
 
----
-
-## 🌐 Live Website
-
-🚀 **Spendly Tracker is live on Railway**
-
-https://spendly-tracker-production.up.railway.app
+The project uses **HTML, CSS, JavaScript, Node.js, Express.js, MySQL, bcrypt, and JSON Web Tokens (JWT)** and is deployed on **Railway**.
 
 ---
 
-## 🎯 Project Purpose
+## 🌐 Live Application
 
-This project was developed for **learning and practice purposes**.
+Spendly Tracker is deployed and available at:
 
-The main goal was to gain hands-on experience with:
-
-- Building a frontend using HTML, CSS, and JavaScript
-- Creating a backend using Node.js and Express.js
-- Designing and consuming REST APIs
-- Performing CRUD operations
-- Connecting Node.js with MySQL
-- Working with asynchronous JavaScript and Fetch API
-- Managing environment variables securely
-- Using Git and GitHub for version control
-- Deploying a full-stack application
-- Hosting MySQL in the cloud
-- Connecting a deployed backend to a cloud database
-- Debugging frontend, backend, database, and deployment issues
+**https://spendly-tracker.up.railway.app/**
 
 ---
 
-## 🚀 Project Overview
+# ✨ Features
 
-Spendly Tracker follows a client-server architecture:
+## 🔐 User Authentication
+
+Spendly includes a multi-user authentication system with:
+
+- User registration
+- Secure user login
+- Password hashing using bcrypt
+- JWT-based authentication
+- Protected expense API routes
+- User-specific expense data
+- Login persistence using browser storage
+- Logout functionality
+
+Passwords are never stored as plain text in the database. They are hashed using **bcrypt** before being stored.
+
+---
+
+## 👥 Multi-User Expense Management
+
+Every registered user has their own expense data.
+
+Expenses are connected to users through a `user_id`.
+
+Example:
 
 ```text
-User
-  ↓
-Frontend
-HTML + CSS + JavaScript
-  ↓
-REST API
-  ↓
-Node.js + Express.js
-  ↓
-MySQL Database
+User 1
+│
+├── Expense 1
+├── Expense 2
+└── Expense 3
+
+
+User 2
+│
+├── Expense 1
+└── Expense 2
 ```
 
-The frontend sends HTTP requests to the Express backend.
+When User 1 logs in, only User 1's expenses are returned.
 
-The backend processes those requests, executes SQL queries on MySQL, and returns the results to the frontend.
+When User 2 logs in, only User 2's expenses are returned.
+
+Users cannot edit or delete another user's expenses through the application's protected API routes.
 
 ---
 
-## ✨ Features
+# 💳 Expense Management
 
-- ➕ Add new expenses
-- 📋 View all expenses
-- ✏️ Edit existing expenses
-- 🗑️ Delete individual expenses
-- 🧹 Clear all expenses
+Logged-in users can:
+
+- ➕ Add a new expense
+- ✏️ Edit an existing expense
+- 🗑️ Delete an individual expense
+- 🧹 Clear all of their expenses
 - 🔍 Search expenses by description
-- 🏷️ Filter expenses by category
-- 💰 Automatically calculate total expenses
-- 📅 Store expense dates
-- 🕐 Record expense creation timestamps
-- 🇮🇳 Display timestamps in Indian Standard Time
-- 💾 Persistent MySQL database storage
-- 🔄 REST API integration
-- 🌐 Frontend-backend communication
-- 🔐 Environment-based database configuration
-- ☁️ Cloud deployment using Railway
+- 🗂️ Filter expenses by category
+- 📅 Select the actual expense date
+- 🕒 View the date and time when an expense was recorded
+- 💰 View their total spending
+- 📋 View recent transactions
 
 ---
 
-## 🛠️ Tech Stack
+# 📅 Expense Date & Timestamp
 
-| Layer | Technology |
-| --- | --- |
-| Frontend | HTML5, CSS3, JavaScript |
-| Backend | Node.js, Express.js |
-| Database | MySQL |
-| Database Driver | MySQL2 |
-| API | REST API |
-| Configuration | dotenv |
-| Development | Nodemon |
-| Version Control | Git & GitHub |
-| Cloud Deployment | Railway |
+Spendly stores two different date values for an expense.
 
----
+### `expense_date`
 
-## 🏗️ Architecture
+This is selected by the user.
 
-```text
-┌─────────────────────────┐
-│          User           │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│        Frontend         │
-│   HTML / CSS / JS       │
-└────────────┬────────────┘
-             │
-             │ Fetch API / HTTP
-             ▼
-┌─────────────────────────┐
-│         Backend         │
-│   Node.js + Express.js  │
-└────────────┬────────────┘
-             │
-             │ SQL Queries
-             ▼
-┌─────────────────────────┐
-│          MySQL          │
-│    Expense Database     │
-└─────────────────────────┘
+For example, if an expense happened yesterday but is being entered today, the user can select yesterday's date.
+
+### `created_at`
+
+This is automatically generated by MySQL using:
+
+```sql
+CURRENT_TIMESTAMP
 ```
 
+Example:
+
+```text
+Expense Date:
+2026-08-21
+
+Created At:
+2026-08-22 22:35:19
+```
+
+This allows Spendly to remember both:
+
+- when the expense actually happened
+- when the expense was added to the application
+
 ---
 
-## 📂 Project Structure
+# 📊 Expense Categories
+
+Spendly currently supports the following categories:
+
+- 🍔 Food
+- 🚌 Transport
+- 🛍️ Shopping
+- 💡 Bills
+- 🎬 Entertainment
+- 📚 Education
+- 🏥 Healthcare
+- ⚡ Utilities
+- 📦 Others
+
+---
+
+# 🔎 Search & Filtering
+
+Users can quickly find transactions using:
+
+### Description Search
+
+Search expenses using words from the expense description.
+
+Example:
+
+```text
+Search: lunch
+```
+
+### Category Filter
+
+Transactions can also be filtered by category.
+
+Example:
+
+```text
+Food
+Transport
+Shopping
+Education
+```
+
+The total expense value automatically reflects the currently displayed transactions.
+
+---
+
+# 🎨 Spendly Branding & UI
+
+Spendly includes its own visual identity.
+
+The latest interface includes:
+
+- Custom Spendly logo
+- Custom Spendly favicon
+- Spendly branding across authentication pages
+- Modern Login page
+- Modern Register page
+- Responsive expense dashboard
+- Larger and improved authentication interface
+- Styled expense cards
+- Search and category filtering interface
+- Responsive transaction table
+- Logout interface
+- Clean and consistent typography using Inter
+
+### Spendly Tagline
+
+> **Track smarter. Spend better.**
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- Google Fonts — Inter
+
+## Backend
+
+- Node.js
+- Express.js
+- REST API
+
+## Authentication & Security
+
+- JSON Web Token (JWT)
+- bcrypt
+- Authentication middleware
+
+## Database
+
+- MySQL
+- mysql2/promise
+
+## Deployment
+
+- Railway
+- Railway MySQL
+
+## Version Control
+
+- Git
+- GitHub
+
+---
+
+# 📂 Project Structure
 
 ```text
 Expenses-Tracker/
 │
+├── middleware/
+│   └── authMiddleware.js
+│
 ├── public/
+│   │
 │   ├── index.html
 │   ├── style.css
-│   └── script.js
+│   ├── script.js
+│   │
+│   ├── login.html
+│   ├── login.css
+│   ├── login.js
+│   │
+│   ├── register.html
+│   ├── register.js
+│   │
+│   ├── spendly-logo.png
+│   └── favicon.png
 │
 ├── routes/
+│   ├── authRoutes.js
 │   └── router.js
 │
 ├── connection.js
@@ -145,130 +262,373 @@ Expenses-Tracker/
 ├── package.json
 ├── package-lock.json
 ├── .gitignore
+├── .env
 └── README.md
 ```
 
-The frontend is served directly by the Express server from the `public` directory.
+> `.env` is used locally but is excluded from GitHub because it contains private configuration values.
 
 ---
 
-## 🔌 REST API
+# 🗄️ Database Design
 
-### Base URL
+Spendly uses two main MySQL tables:
 
-```text
-/api/v1/expenses
-```
-
-### Available Endpoints
-
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/v1/expenses/` | Check API status |
-| `GET` | `/api/v1/expenses/tables` | Retrieve database tables |
-| `GET` | `/api/v1/expenses/allrows` | Retrieve all expenses |
-| `POST` | `/api/v1/expenses/` | Create a new expense |
-| `PUT` | `/api/v1/expenses/:id` | Update an expense |
-| `DELETE` | `/api/v1/expenses/:id` | Delete an expense |
-| `DELETE` | `/api/v1/expenses/clear` | Delete all expenses |
-
-### Example Request
-
-```http
-POST /api/v1/expenses/
-Content-Type: application/json
-```
-
-```json
-{
-  "description": "Lunch",
-  "category": "Food",
-  "expense_date": "2026-08-17",
-  "amount": 250
-}
-```
+1. `users`
+2. `expenses`
 
 ---
 
-# ⚙️ Getting Started
+## 👤 Users Table
 
-## Prerequisites
-
-Install the following before running the project locally:
-
-- Node.js
-- npm
-- MySQL
-- Git
-
----
-
-## 1. Clone the Repository
-
-```bash
-git clone https://github.com/dskvamsi/Expenses-Tracker.html.git
-```
-
-Then:
-
-```bash
-cd Expenses-Tracker.html
-```
-
----
-
-## 2. Configure MySQL
-
-Create a database:
+The `users` table stores registered user accounts.
 
 ```sql
-CREATE DATABASE expense_tracker;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
 ```
 
-Select it:
+### Structure
 
-```sql
-USE expense_tracker;
-```
+| Column | Purpose |
+|---|---|
+| `id` | Unique user identifier |
+| `username` | Unique username |
+| `password` | bcrypt-hashed password |
 
-Create the `expenses` table:
+Passwords are stored as bcrypt hashes rather than plain-text passwords.
+
+---
+
+## 💰 Expenses Table
 
 ```sql
 CREATE TABLE expenses (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     description VARCHAR(255) NOT NULL,
     category VARCHAR(255) NOT NULL,
     expense_date DATE NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    amount DOUBLE NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+```
+
+### Structure
+
+| Column | Purpose |
+|---|---|
+| `id` | Unique expense identifier |
+| `user_id` | Identifies the owner of the expense |
+| `description` | Expense description |
+| `category` | Expense category |
+| `expense_date` | Date selected by the user |
+| `amount` | Expense amount |
+| `created_at` | Automatic date and time of entry |
+
+---
+
+# 🔐 Authentication Flow
+
+The authentication process works as follows:
+
+```text
+User
+ │
+ ▼
+Register Account
+ │
+ ▼
+Password hashed using bcrypt
+ │
+ ▼
+User saved in MySQL
+ │
+ ▼
+Login
+ │
+ ▼
+Username + Password verified
+ │
+ ▼
+JWT generated
+ │
+ ▼
+JWT stored in browser
+ │
+ ▼
+Authenticated requests
+ │
+ ▼
+Protected Expense APIs
+ │
+ ▼
+User-specific expense data
 ```
 
 ---
 
-## 3. Configure Environment Variables
+# 🛡️ Authentication Middleware
 
-Create a `.env` file in the project root:
+Protected expense routes use authentication middleware.
+
+The browser sends the JWT with authenticated API requests.
+
+The middleware:
+
+```text
+Receives Request
+       ↓
+Reads JWT
+       ↓
+Verifies JWT_SECRET
+       ↓
+Extracts User ID
+       ↓
+Sets req.user
+       ↓
+Expense route executes
+```
+
+The backend can then use:
+
+```javascript
+req.user.id
+```
+
+to determine which user owns the requested expense data.
+
+---
+
+# 🔒 User Data Isolation
+
+One of the major improvements in Spendly is user-specific database access.
+
+For example, retrieving expenses uses the logged-in user's ID:
+
+```sql
+SELECT *
+FROM expenses
+WHERE user_id = ?
+ORDER BY created_at DESC, id DESC;
+```
+
+Deleting an expense also checks ownership:
+
+```sql
+DELETE FROM expenses
+WHERE id = ?
+AND user_id = ?;
+```
+
+Updating expenses follows the same approach.
+
+This prevents one authenticated user from modifying another user's expenses through the application's normal API.
+
+---
+
+# 🚪 Logout
+
+Spendly supports logout by removing authentication information stored in the browser.
+
+```javascript
+localStorage.removeItem("spendlyToken");
+localStorage.removeItem("spendlyUser");
+```
+
+The user is then redirected to the Login page.
+
+```text
+Dashboard
+    ↓
+Logout
+    ↓
+JWT removed
+    ↓
+User information removed
+    ↓
+Login Page
+```
+
+---
+
+# 📡 REST API
+
+## Authentication Routes
+
+### Register
+
+```http
+POST /api/auth/register
+```
+
+Creates a new Spendly account.
+
+---
+
+### Login
+
+```http
+POST /api/auth/login
+```
+
+Authenticates the user and generates a JWT.
+
+---
+
+# 💳 Expense API
+
+Expense routes require authentication.
+
+### Get Expenses
+
+```http
+GET /api/v1/expenses/allrows
+```
+
+Returns expenses belonging to the logged-in user.
+
+---
+
+### Add Expense
+
+```http
+POST /api/v1/expenses/
+```
+
+Adds an expense for the logged-in user.
+
+---
+
+### Update Expense
+
+```http
+PUT /api/v1/expenses/:id
+```
+
+Updates an expense belonging to the logged-in user.
+
+---
+
+### Delete Expense
+
+```http
+DELETE /api/v1/expenses/:id
+```
+
+Deletes one expense belonging to the logged-in user.
+
+---
+
+### Clear Expenses
+
+```http
+DELETE /api/v1/expenses/clear
+```
+
+Deletes all expenses belonging to the logged-in user.
+
+---
+
+# ⚙️ Environment Variables
+
+Spendly uses environment variables to keep sensitive configuration outside the source code.
+
+For local development, create:
+
+```text
+.env
+```
+
+Example:
 
 ```env
 PORT=3000
 
 DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
+DB_USER=your_mysql_username
+DB_PASSWORD=your_mysql_password
 DB_NAME=expense_tracker
 DB_PORT=3306
+
+JWT_SECRET=your_private_jwt_secret
 ```
-
-Replace the values with your local MySQL configuration.
-
-> ⚠️ Never commit your `.env` file or database credentials to GitHub.
 
 ---
 
-## 4. Install Dependencies
+# ☁️ Railway Environment Variables
 
-From the project root, run:
+The deployed application uses Railway environment variables.
+
+The application supports:
+
+```text
+MYSQLHOST
+MYSQLUSER
+MYSQLPASSWORD
+MYSQLDATABASE
+MYSQLPORT
+JWT_SECRET
+```
+
+The database connection uses Railway variables first and local `.env` values as a fallback.
+
+Example concept:
+
+```javascript
+host:
+    process.env.MYSQLHOST ||
+    process.env.DB_HOST
+```
+
+This allows the same backend to work locally and on Railway.
+
+---
+
+# ⚠️ Important Security Note
+
+Never upload the following to GitHub:
+
+```text
+.env
+Database passwords
+JWT_SECRET
+Private credentials
+```
+
+Make sure `.gitignore` contains:
+
+```gitignore
+node_modules/
+.env
+```
+
+Production secrets should be stored in Railway Variables rather than directly in source code.
+
+---
+
+# 💻 Running Spendly Locally
+
+## 1. Clone the Repository
+
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+```
+
+---
+
+## 2. Open the Project
+
+```bash
+cd Expenses-Tracker
+```
+
+---
+
+## 3. Install Dependencies
 
 ```bash
 npm install
@@ -276,215 +636,275 @@ npm install
 
 ---
 
-## 5. Start the Application
+## 4. Create the Database
 
-Run:
+Create:
+
+```sql
+CREATE DATABASE expense_tracker;
+```
+
+Then:
+
+```sql
+USE expense_tracker;
+```
+
+Create the `users` and `expenses` tables using the SQL structures shown above.
+
+---
+
+## 5. Configure Environment Variables
+
+Create a `.env` file and configure:
+
+```env
+PORT=3000
+
+DB_HOST=localhost
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_NAME=expense_tracker
+DB_PORT=3306
+
+JWT_SECRET=your_private_secret
+```
+
+---
+
+## 6. Start the Application
 
 ```bash
 npm start
 ```
 
-The Express server will start on:
+You should see:
 
 ```text
-http://localhost:3000
-```
-
-Open that address in your browser.
-
-> The frontend is served by Express from the `public` folder, so VS Code Live Server is not required.
-
----
-
-## ☁️ Cloud Deployment
-
-Spendly Tracker is deployed using **Railway**.
-
-The deployment consists of:
-
-```text
-Spendly Tracker
-      │
-      ▼
-Railway Node.js Service
-      │
-      ▼
-Express REST API
-      │
-      ▼
-Railway MySQL Database
-```
-
-The production application uses environment variables for database configuration.
-
-The backend supports Railway variables such as:
-
-```text
-MYSQLHOST
-MYSQLPORT
-MYSQLUSER
-MYSQLPASSWORD
-MYSQLDATABASE
-```
-
-Sensitive database credentials are stored as Railway environment variables and are not included in the source code.
-
----
-
-## 🗄️ Database Structure
-
-The application uses an `expenses` table.
-
-| Field | Description |
-| --- | --- |
-| `id` | Unique expense ID |
-| `description` | Description of the expense |
-| `category` | Expense category |
-| `expense_date` | Date of the expense |
-| `amount` | Expense amount |
-| `created_at` | Record creation timestamp |
-
-The `id` field automatically increments whenever a new expense is created.
-
-The `created_at` timestamp is automatically generated when the record is inserted.
-
----
-
-## 🔄 CRUD Operations
-
-Spendly Tracker implements the four fundamental database operations:
-
-```text
-CREATE → Add Expense
-
-READ   → View Expenses
-
-UPDATE → Edit Expense
-
-DELETE → Delete Expense
-```
-
-The application also supports deleting all expense records using the **Clear All** feature.
-
----
-
-## 🔄 Application Flow
-
-```text
-User
- │
- ▼
-Spendly Tracker UI
- │
- │ Fetch API
- ▼
-Express Server
- │
- ▼
-Expense Router
- │
- ▼
-MySQL
- │
- ▼
-Database Response
- │
- ▼
-Express API Response
- │
- ▼
-Frontend
+Server running on port 3000
+Connected to MySQL
 ```
 
 ---
 
-## 🔐 Security
+## 7. Open Spendly
 
-Sensitive information is not stored directly in the source code.
-
-Do not upload:
+Open:
 
 ```text
-.env
-database passwords
-API keys
-private credentials
+http://localhost:3000/register.html
 ```
 
-The `.env` file should always be included in `.gitignore`.
+Create an account.
 
-Production database credentials are managed through Railway environment variables.
+Then log in and start adding expenses.
 
 ---
 
-## 📚 What I Learned
+# 🌐 Local & Production API URLs
 
-Through this project, I gained hands-on experience with:
+The frontend uses relative API URLs.
 
-- HTML5
-- CSS3
+For example:
+
+```javascript
+fetch("/api/auth/register")
+```
+
+and:
+
+```javascript
+fetch("/api/auth/login")
+```
+
+This is important because the same code automatically works in both environments.
+
+### Local
+
+```text
+http://localhost:3000/api/auth/login
+```
+
+### Production
+
+```text
+https://spendly-tracker.up.railway.app/api/auth/login
+```
+
+No hard-coded localhost URL is required in production.
+
+---
+
+# ☁️ Railway Deployment
+
+Spendly Tracker is deployed using Railway.
+
+Architecture:
+
+```text
+                GitHub
+                   │
+                   ▼
+          Railway Deployment
+                   │
+                   ▼
+            Node.js Server
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+      Frontend          Express API
+                            │
+                            ▼
+                      Railway MySQL
+```
+
+When new code is pushed to GitHub, Railway can redeploy the latest version.
+
+---
+
+# 🔐 Production JWT Configuration
+
+JWT authentication requires:
+
+```text
+JWT_SECRET
+```
+
+The production secret is configured using:
+
+```text
+Railway
+   ↓
+Service
+   ↓
+Variables
+   ↓
+JWT_SECRET
+```
+
+The secret value must remain private and should never be committed to GitHub.
+
+---
+
+# 🧪 Multi-User Testing
+
+The authentication system was tested using multiple accounts.
+
+Example:
+
+```text
+Database
+
+User ID 1
+├── ESP32 expense
+└── MQ135 expense
+
+User ID 2
+├── Dinner expense
+└── Transport expense
+```
+
+When User 1 logs in:
+
+```text
+Only User 1 expenses are displayed.
+```
+
+When User 2 logs in:
+
+```text
+Only User 2 expenses are displayed.
+```
+
+This verifies that user-specific expense filtering is functioning correctly.
+
+---
+
+# 🚀 Future Improvements
+
+Potential future improvements include:
+
+- 📧 Email-based registration
+- 🔑 Forgot Password / Reset Password
+- 📊 Expense analytics
+- 📈 Spending charts
+- 📅 Monthly expense reports
+- 📆 Yearly reports
+- 💵 Monthly budget limits
+- ⚠️ Budget alerts
+- 👤 User profile management
+- 📤 CSV export
+- 📄 PDF expense reports
+- 🌙 Dark mode
+- 📱 Additional mobile UI improvements
+
+---
+
+# 📚 What I Learned
+
+This project helped me gain practical experience with:
+
+- HTML
+- CSS
 - JavaScript
+- DOM manipulation
+- Fetch API
 - Node.js
 - Express.js
-- REST APIs
-- CRUD operations
+- REST API development
 - MySQL
-- MySQL2
-- SQL queries
-- Fetch API
-- Asynchronous JavaScript
+- CRUD operations
+- Relational user data
+- Password hashing
+- bcrypt
+- JSON Web Tokens
+- Authentication middleware
 - Environment variables
-- Client-server architecture
-- Git and GitHub
-- Cloud MySQL databases
+- Git
+- GitHub
 - Railway deployment
-- Debugging full-stack applications
-- Connecting frontend, backend, and database services
+- Cloud MySQL
+- Debugging frontend/backend integration
+- Local and production environment configuration
 
 ---
 
-## 🔮 Future Improvements
+# 📌 Current Project Status
 
-Future versions of Spendly Tracker could include:
+### Spendly Tracker — Multi-User Full-Stack Expense Management System
 
-- 🔐 User authentication
-- 👤 User-specific expense accounts
-- 📊 Expense analytics and charts
-- 📅 Monthly and yearly reports
-- 🎯 Monthly budget limits
-- 📁 CSV/PDF export
-- 🌙 Dark mode
-- 📱 Improved mobile responsiveness
-- 🧪 Automated testing
-- ✅ Stronger API validation
-- 📈 Category-wise spending analytics
-
----
-
-## 🧑‍💻 Author
-
-**Vamsi**
-
-Engineering Student
-
-GitHub: @dskvamsi
-
----
-
-## 📌 Project Status
-
-**Status: ✅ Live & Deployed**
-
-Spendly Tracker is currently deployed and connected to a cloud-hosted MySQL database.
-
-### 🌐 Live Application
-
-https://spendly-tracker-production.up.railway.app
-
-### 💻 GitHub Repository
-
-https://github.com/dskvamsi/Expenses-Tracker.html
+| Feature | Status |
+|---|---|
+| Spendly Branding | ✅ |
+| Custom Logo | ✅ |
+| Custom Favicon | ✅ |
+| Responsive Dashboard | ✅ |
+| Register | ✅ |
+| Login | ✅ |
+| bcrypt Password Hashing | ✅ |
+| JWT Authentication | ✅ |
+| Protected Routes | ✅ |
+| Multi-User Support | ✅ |
+| User-Specific Expenses | ✅ |
+| Add Expense | ✅ |
+| Edit Expense | ✅ |
+| Delete Expense | ✅ |
+| Clear Expenses | ✅ |
+| Expense Date Selection | ✅ |
+| Automatic Timestamp | ✅ |
+| Search | ✅ |
+| Category Filter | ✅ |
+| Total Expense Calculation | ✅ |
+| Logout | ✅ |
+| Local MySQL | ✅ |
+| Railway MySQL | ✅ |
+| Railway Deployment | ✅ |
+| Live Website | ✅ |
 
 ---
 
-⭐ If you found this project useful, consider giving the repository a star!
+# 💙 Spendly Tracker
+
+### Track smarter. Spend better.
+
+A full-stack expense management project built to learn how modern web applications connect the frontend, backend, authentication system, database, and cloud deployment.
