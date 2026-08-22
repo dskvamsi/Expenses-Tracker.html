@@ -3,7 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+
 import expenseRouter from "./routes/router.js";
+import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -27,17 +29,28 @@ app.use(express.json());
 // Serve frontend files
 app.use(express.static(path.join(__dirname, "public")));
 
-// API routes
+// ==========================================
+// API ROUTES
+// ==========================================
+
+// Expense routes
 app.use("/api/v1/expenses", expenseRouter);
+
+// Authentication routes
+app.use("/api/auth", authRouter);
 
 // Homepage route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(
+        path.join(__dirname, "public", "index.html")
+    );
 });
 
 // Explicit index route
 app.get("/index.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(
+        path.join(__dirname, "public", "index.html")
+    );
 });
 
 // Start server

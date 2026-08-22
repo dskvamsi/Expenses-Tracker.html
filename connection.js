@@ -10,11 +10,13 @@ dotenv.config();
 
 const pool = mysql.createPool({
 
-    // Railway variables first
-    // Local .env variables used as fallback
-    host: process.env.MYSQLHOST || process.env.DB_HOST,
+    host:
+        process.env.MYSQLHOST ||
+        process.env.DB_HOST,
 
-    user: process.env.MYSQLUSER || process.env.DB_USER,
+    user:
+        process.env.MYSQLUSER ||
+        process.env.DB_USER,
 
     password:
         process.env.MYSQLPASSWORD ||
@@ -87,17 +89,24 @@ export async function showAllTables(req, res) {
 
 
 // ==========================================
-// Show All Expenses
+// Show Logged-In User Expenses
 // ==========================================
 
 export async function showAllRows(req, res) {
 
     try {
 
+        const userId = req.user.id;
+
         const [result] = await pool.query(
+
             `SELECT *
              FROM expenses
-             ORDER BY created_at DESC`
+             WHERE user_id = ?
+             ORDER BY created_at DESC, id DESC`,
+
+            [userId]
+
         );
 
         res.status(200).json(result);
@@ -125,6 +134,8 @@ export async function addExpense(req, res) {
 
     try {
 
+        const userId = req.user.id;
+
         const {
             description,
             category,
@@ -149,18 +160,22 @@ export async function addExpense(req, res) {
         }
 
 
+        // created_at is generated automatically
+        // by MySQL DEFAULT CURRENT_TIMESTAMP
         const [result] = await pool.query(
 
             `INSERT INTO expenses
             (
+                user_id,
                 description,
                 category,
                 expense_date,
                 amount
             )
-            VALUES (?, ?, ?, ?)`,
+            VALUES (?, ?, ?, ?, ?)`,
 
             [
+                userId,
                 description,
                 category,
                 expense_date,
@@ -206,6 +221,8 @@ export async function updateExpense(req, res) {
 
         const { id } = req.params;
 
+        const userId = req.user.id;
+
         const {
             description,
             category,
@@ -238,14 +255,16 @@ export async function updateExpense(req, res) {
                  expense_date = ?,
                  amount = ?
 
-             WHERE id = ?`,
+             WHERE id = ?
+             AND user_id = ?`,
 
             [
                 description,
                 category,
                 expense_date,
                 amount,
-                id
+                id,
+                userId
             ]
 
         );
@@ -254,7 +273,7 @@ export async function updateExpense(req, res) {
         if (result.affectedRows === 0) {
 
             return res.status(404).json({
-                message: "Expense not found"
+                message: "Expense not found."
             });
 
         }
@@ -291,12 +310,19 @@ export async function deleteExpense(req, res) {
 
         const { id } = req.params;
 
+        const userId = req.user.id;
+
 
         const [result] = await pool.query(
 
-            "DELETE FROM expenses WHERE id = ?",
+            `DELETE FROM expenses
+             WHERE id = ?
+             AND user_id = ?`,
 
-            [id]
+            [
+                id,
+                userId
+            ]
 
         );
 
@@ -304,7 +330,7 @@ export async function deleteExpense(req, res) {
         if (result.affectedRows === 0) {
 
             return res.status(404).json({
-                message: "Expense not found"
+                message: "Expense not found."
             });
 
         }
@@ -332,21 +358,29 @@ export async function deleteExpense(req, res) {
 
 
 // ==========================================
-// Clear All Expenses
+// Clear Logged-In User Expenses
 // ==========================================
 
 export async function clearAllExpenses(req, res) {
 
     try {
 
+        const userId = req.user.id;
+
+
         await pool.query(
-            "DELETE FROM expenses"
+
+            `DELETE FROM expenses
+             WHERE user_id = ?`,
+
+            [userId]
+
         );
 
 
         res.status(200).json({
             message:
-                "All expenses deleted successfully"
+                "All your expenses deleted successfully"
         });
 
 
@@ -356,7 +390,6 @@ export async function clearAllExpenses(req, res) {
             "❌ Error clearing expenses:",
             err.message
         );
-
 
         res.status(500).json({
             error: err.message

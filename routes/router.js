@@ -9,6 +9,8 @@ import {
     clearAllExpenses
 } from "../connection.js";
 
+import { authenticateUser } from "../middleware/authMiddleware.js";
+
 
 const expenseRouter = Router();
 
@@ -16,47 +18,80 @@ const expenseRouter = Router();
 // -------------------------
 // Test Route
 // -------------------------
+
 expenseRouter.get("/", (req, res) => {
+
     res.status(200).json({
         message: "Expense Tracker API is running 🚀"
     });
+
 });
 
 
 // -------------------------
 // Get all database tables
 // -------------------------
-expenseRouter.get("/tables", showAllTables);
+
+expenseRouter.get(
+    "/tables",
+    authenticateUser,
+    showAllTables
+);
 
 
 // -------------------------
 // Get all expenses
 // -------------------------
-expenseRouter.get("/allrows", showAllRows);
+
+expenseRouter.get(
+    "/allrows",
+    authenticateUser,
+    showAllRows
+);
 
 
 // -------------------------
 // Add new expense
 // -------------------------
-expenseRouter.post("/", addExpense);
+
+expenseRouter.post(
+    "/",
+    authenticateUser,
+    addExpense
+);
 
 
 // -------------------------
 // Update expense
 // -------------------------
-expenseRouter.put("/:id", updateExpense);
+
+expenseRouter.put(
+    "/:id",
+    authenticateUser,
+    updateExpense
+);
 
 
 // -------------------------
 // Clear all expenses
 // -------------------------
-expenseRouter.delete("/clear", clearAllExpenses);
+
+expenseRouter.delete(
+    "/clear",
+    authenticateUser,
+    clearAllExpenses
+);
 
 
 // -------------------------
 // Delete single expense
 // -------------------------
-expenseRouter.delete("/:id", deleteExpense);
+
+expenseRouter.delete(
+    "/:id",
+    authenticateUser,
+    deleteExpense
+);
 
 
 export default expenseRouter;
