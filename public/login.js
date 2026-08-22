@@ -43,9 +43,7 @@ loginForm.addEventListener("submit", async function (event) {
 
     try {
 
-        const response = await fetch(
-            "/api/auth/login",
-            {
+                const response = await fetch("/api/auth/login", {
                 method: "POST",
 
                 headers: {
